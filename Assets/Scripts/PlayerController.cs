@@ -4,7 +4,10 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    public float movementSpeed = 10f;
+    public float movementSpeed = 0;
+
+    public bool isAccelerating = false;
+
     public SpawnManager spawnManager;
 
     // Start is called before the first frame update
@@ -12,22 +15,47 @@ public class PlayerController : MonoBehaviour
     {
     }
 
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            isAccelerating = true;
+            Debug.Log("toco");
+        }
+
+        if (Input.GetKeyUp(KeyCode.Space))
+        {
+            isAccelerating = false;
+            Debug.Log("solto");
+        }
+    }
+
     void FixedUpdate()
     {
-        float hMovement = Input.GetAxis("Horizontal") * movementSpeed / 2 * Time.deltaTime;
-        float vMovement = Input.GetAxis("Vertical") * movementSpeed * Time.deltaTime;
+        if (isAccelerating)
+        {
+            movementSpeed += 0.2f;
+        }
+        else
+        {
+            movementSpeed -= 0.2f;
+        }
+        Debug.Log(movementSpeed);
+        movementSpeed = Mathf.Clamp(movementSpeed, 0, 100);
 
-        // transform
-        //     .Translate(new Vector3(vMovement, 0, -1*hMovement) * Time.deltaTime);
+        float hMovement =
+            Input.GetAxis("Horizontal") * movementSpeed / 2 * Time.deltaTime;
+        float vMovement =
+            Input.GetAxis("Vertical") * movementSpeed * Time.deltaTime;
+
         transform.position =
             new Vector3(transform.position.x + hMovement,
                 transform.position.y,
                 transform.position.z + vMovement);
     }
 
-    private void OnTriggerEnter (Collider collider)
+    private void OnTriggerEnter(Collider collider)
     {
         spawnManager.SpwanTriggerEntered();
-        Debug.Log("aca");
     }
 }
