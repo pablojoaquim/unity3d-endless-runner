@@ -6,7 +6,7 @@ public class SimpleCameraController : MonoBehaviour
 {
     private Transform playerTransform;
 
-    private float yOffset = 7;
+    private float yOffset = 11;
 
     private float zOffset = -5f;
 
